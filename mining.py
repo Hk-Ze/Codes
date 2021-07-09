@@ -1,33 +1,22 @@
-import math 
+from os import read
 import time
 import hashlib
 
-def hash(str):
-    result = hashlib.sha256(str.encode()).hexdigest()
-    return result 
-
-
-
-# http://tcpschool.com/webbasic/bitcoin
+readfile = open("C:\\Users\\cho03\\Desktop\\programming\\Codes\\miningLog.txt", 'r')
+writefile = open("C:\\Users\\cho03\\Desktop\\programming\\Codes\\miningLog.txt", 'w')
 
 MAX_NONCE = int(1e10)
 DIFFICULTY = 5
 
-# https://www.blockchain.com/btc/block/00000000000000000006dfdf4ae77bc817ae825858884e68c016fbf36298e793
-block_number = 668861
-transactions = '''
-A->B:10
-D->A:999
-C->Z:1
-'''
 previous_hash = '00000000000000000006dfdf4ae77bc817ae825858884e68c016fbf36298e793'
 
 new_hash = None
 
 start_time = time.time()
-for i in range(5):
+
+def makeBlock(block_number, transactions, previous_hash):
     for nonce in range(MAX_NONCE):
-        text = str(block_number) + transactions + previous_hash + str(nonce)
+        text = str(block_number) + str(transactions) + str(previous_hash) + str(nonce)
         new_hash = hashlib.sha256(text.encode('ascii')).hexdigest()
 
         if new_hash.startswith('0' * DIFFICULTY):
@@ -36,11 +25,18 @@ for i in range(5):
             print(f'Transactions: {transactions}')
             print(f'Block_number: {block_number}')
             break
-    print('\n')
+    print('\\n')
     previous_hash = new_hash
     block_number += 1
+    return previous_hash, block_number
 
     if new_hash is None:
         print('Cannot find new hash')
+
+writefile.write(makeBlock(12345,str("asdasd"),1234567))
+lines = readfile.readline()
+print(lines)
+
+
 
 print(f'Mining took {time.time() - start_time}s!')
