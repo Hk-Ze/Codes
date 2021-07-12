@@ -5,17 +5,25 @@ import hashlib
 readfile = open("C:\\Users\\cho03\\Desktop\\programming\\Codes\\miningLog.txt", 'r')
 writefile = open("C:\\Users\\cho03\\Desktop\\programming\\Codes\\miningLog.txt", 'w')
 
-MAX_NONCE = int(1e10)
+f = open("C:\\Users\\cho03\\Desktop\\programming\\Codes\\miningLog.txt", 'r+')   
+f.truncate(0)
+    
+max_nonce = int(1e10)
+
 DIFFICULTY = 5
 
-previous_hash = '00000000000000000006dfdf4ae77bc817ae825858884e68c016fbf36298e793'
+previous_hash = '000000000000000000064587uyhg4w7g98w59e98r8r9veweqer124889b9v658h'
 
 new_hash = None
+
+block_number = 0
+
+transactions = "informations"
 
 start_time = time.time()
 
 def makeBlock(block_number, transactions, previous_hash):
-    for nonce in range(MAX_NONCE):
+    for nonce in range(max_nonce):
         text = str(block_number) + str(transactions) + str(previous_hash) + str(nonce)
         new_hash = hashlib.sha256(text.encode('ascii')).hexdigest()
 
@@ -25,17 +33,34 @@ def makeBlock(block_number, transactions, previous_hash):
             print(f'Transactions: {transactions}')
             print(f'Block_number: {block_number}')
             break
-    print('\\n')
+    print('\n')
     previous_hash = new_hash
-    block_number += 1
-    return previous_hash, block_number
+    str_previous_hash = str(previous_hash)
+    str_block_number = str(block_number)
+    hashBack = str_previous_hash + str_block_number + transactions
+    return hashBack
 
     if new_hash is None:
         print('Cannot find new hash')
 
-writefile.write(makeBlock(12345,str("asdasd"),1234567))
-lines = readfile.readline()
-print(lines)
+while True:
+    if block_number > 10:
+        #10개의 블럭 생성시 강제 종료 
+        break
+    
+    block = makeBlock(block_number, transactions, previous_hash)
+    write_block = "Block"+ str(block_number) + "[" + block + "]"
+    writefile.write(write_block)
+    writefile.write('\n')
+    print(block)
+    print("\n")
+    block_number += 1 
+    
+   
+    
+
+
+
 
 
 
